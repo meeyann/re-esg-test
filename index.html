@@ -976,6 +976,7 @@ nav {
       <div class="modal-message" id="modal-msg"></div>
     </div>
     <div class="modal-footer">
+      <div id="modal-ritual-wrap" style="display:none;margin-bottom:10px;"></div>
       <button class="btn" style="width:100%;font-size:0.82rem;" onclick="closeCardModal()">닫기</button>
     </div>
   </div>
@@ -995,7 +996,7 @@ const CONFIG = {
   storageMode: 'tallyRedirect',
   googleAppsScriptUrl: 'https://script.google.com/macros/s/AKfycbyjhHYYu_-aOylrd1ksyJJGll9aZhmRM_2Sq8AqRLdwGlBl5LQxUP-AqHHc95WfaOZZ/exec',
   secretToken: 'reesg2026amado',
-  ritualBaseUrl: 're_esg_qr_ritual_cards_v2_final_links.html',
+  ritualBaseUrl: 're_esg_qr_ritual_cards_v3_fixed.html',
   workbookDownloadUrl: 'https://meeyann.github.io/re-esg-guide/',
   storeWaitlistTallyUrl: 'PASTE_OPTIONAL_TALLY_WAITLIST_URL_HERE',
   workbookTallyUrl: 'PASTE_OPTIONAL_TALLY_WORKBOOK_URL_HERE',
@@ -1239,7 +1240,7 @@ const RESULTS={
     wb:'뿌리 지킴형 7일 감정 일지 — 고요함 속에서 평화 찾기'},
 };
 
-const RITUAL_CARDS=new Set(['E-01','E-03','E-07','E-08','S-09','S-10','G-01','G-06','G-13','G-19']);
+const RITUAL_CARDS=new Set(['E-01','E-03','E-07','E-08','S-02','S-09','S-10','S-23','G-01','G-06','G-13','G-19']);
 
 let curQ=0,answers={E:0,S:0,G:0},selectedOpt=null;
 let capturedEmail='',capturedName='',capturedType='',resultKey='';
@@ -1512,6 +1513,16 @@ function openCardModal(id){
   document.getElementById('modal-says').textContent=d.says;
   document.getElementById('modal-care').textContent=d.care;
   document.getElementById('modal-msg').textContent=d.msg;
+  // 리추얼 링크: RITUAL_CARDS에 포함된 카드만 표시
+  const ritualWrap=document.getElementById('modal-ritual-wrap');
+  if(RITUAL_CARDS.has(id)){
+    const ritualUrl=`${CONFIG.ritualBaseUrl}?card=${encodeURIComponent(id)}`;
+    ritualWrap.innerHTML=`<a class="ritual-link ${cl}-ritual" href="${ritualUrl}" target="_blank" rel="noopener" style="display:block;text-align:center;font-size:0.8rem;padding:10px 0;">🌿 리추얼 시작하기 →</a>`;
+    ritualWrap.style.display='block';
+  } else {
+    ritualWrap.innerHTML='';
+    ritualWrap.style.display='none';
+  }
   document.getElementById('card-modal').classList.add('open');
 }
 function closeCardModal(){document.getElementById('card-modal').classList.remove('open');}
